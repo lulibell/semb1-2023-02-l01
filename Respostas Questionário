@@ -1,0 +1,56 @@
+Lista de exercícios Sistemas Embarcados
+Luma Cosini – 11921EBI029
+
+1.	Explique brevemente o que é compilação cruzada (cross-compiling) e para que ela serve.
+A compilação cruzada é a compilação de um programa em um sistema que vai ser executado em um sistema de arquitetura diferente. Ex: Linux para ARM Cortex M4.
+2.	O que é um código de inicialização ou “startup” e qual sua finalidade.
+É um código que prepara todo o ambiente para a execução do programa principal (antes do main). Ele configura a memória, inicializa variáveis globais, configuração do processador e preparação para executar o código principal do programa.
+
+3.	Sobre o utilitário “make” e o arquivo “Makefile” respondas:
+
+a)	Explique com suas palavras o que é e para que serve o “Makefile”
+O Makefile é um arquivo que configura e define como o programa deve ser compilado e vinculado. 
+b)	Descreva brevemente o processo realizado pelo utilitário “make” para compilar o programa
+O comando make analisa o código descrito no Makefile e compila os arquivos fontes necessários para criar os arquivos objetos executáveis.
+c)	Qual é a sintaxe utilizada para criar um novo “target”
+Target: dependências 
+Ex:
+main.o: main.c
+d)	Como são definidas as dependências de um “target”, para que elas são utilizadas?
+As dependências são definidas após o nome dos target. Isto é, eles indicam quais arquivos o target depende para que eles sejam compilados
+e)	O que são as regras do “Makefile”, qual a diferença entre regras implícitas e explícitas.
+As regras são instruções que especificam como compilar e vincular os arquivos. As regras explícitas compilam os arquivos com base em seus nomes originais ou parecidos. Descreve como um alvo pode depender de um arquivo com um nome semelhante ao alvo. Já as explícitas, listam os arquivos dos quais os alvos dependem, chamados de pré-requisitos do alvo.
+Sobre ARM Cortex-M responda:
+a)	Explique o conjunto de instruções “Thumb” e suas principais vantagens na arquitetura ARM. Como o conjunto de instruções “Thumb” opera em conjunto com o conjunto de instruções ARM?
+Thumb é um conjunto de instruções de tamanho reduzido (16 bytes) que economiza espaço de memória e melhora o desempenho de sistemas embarcados. O conjunto Thumb opera em conjunto com o conjunto de instruções ARM (32 bytes), permitindo que o processador execute ambos. 
+b)	Explique as diferenças entre as arquiteturas ARM Load/Store e Register/Register.
+Na arquitetura Load/Register, apenas instruções de carga (load) e armazenamento (store) podem acessar a memória. Isso significa que, para realizar operações aritméticas ou lógicas com dados da memória, esses dados precisam ser carregados para os registradores primeiro. Na arquitetura Register/Register, as operações podem ser realizadas diretamente entre os registradores da CPU, sem a necessidade de acessar diretamente da memória. Tornando-a mais eficiente, principalmente em termos de desempenho e em operações que envolvem muitos dados.
+c)	Os processadores ARM Cortex-M oferecem diversos recursos que podem ser explorados por sistemas baseados em RTOS (Real Time Operating Systems). Por exemplo, a separação da execução do código em níveis de acesso e diferentes modos de operação. Explique detalhadamente como funciona os níveis de acesso de execução de código e os modos de operação nos processadores ARM Cortex-M.
+Os processadores ARM Cortex-M possuem diferentes níveis de acesso para a execução do código. Existem dois principais: privilegiado e não privilegiado. No modo privilegiado, o processador tem acesso completo a todos os recursos e permissões do sistema. Isso é usado principalmente pelo sistema operacional e pelo código de baixo nível que precisa de acesso direto ao hardware. No modo não privilegiado, o acesso a certos recursos e permissões é limitado. Isso visa garantir a segurança do sistema. 
+Modos de Operação: determinam como o processador responde às interrupções e eventos do sistema. Um dos modos comuns é o modo Thread, onde a CPU executa o código normal do programa. Outro modo importante é o modo Handler, onde o processador lida com interrupções e exceções. Durante uma interrupção, por exemplo, o processador pode mudar para o modo Handler pra lidar com um evento, preservando o contexto do código em execução.
+
+d)	Explique como os processadores ARM tratam as exceções e as interrupções. Quais são os diferentes tipos de exceção e como elas são priorizadas? Descreva a estratégia de group priority e sub priority presente nesse processo.
+Exceções e interrupções são eventos que ocorrem durante a execução do programa e requerem uma resposta imediata do processador. Isso pode incluir eventos como uma solicitação de entrada/sáida, erros de execução ou condições de erro.
+Tipos de Exceções:
+•	Interrupções externas: gerados por dispositivos periféricos para solicitar a atenção do processador.
+•	Exceções de software: instruções específicas que podem gerar uma inconformidade, como uma divisão por zero.
+•	Exceções de memória: erros de acesso à memória, como uma violação de acesso.
+Group Priority (Prioridade do Grupo):
+Determina prioridade geral de um conjunto de exceções. O processador usa a goup priority para decidir qual grupo de exceções deve ser atendido primeiro.
+Sub Priority (Subprioridade)
+Usada para resolver disputas dentro do mesmo grupo de prioridade. Exemplo: Se duas exceções do mesmo grupo de prioridade ocorrem simultaneamente, a interrupção com a sub priority mais alta será atendida primeiro.
+e)	Qual a diferença entre os registradores CPSR (Currente Program Status Register) e SPSR (Saved Program Status Register)?
+O CPSR é o registro que armazena o estado atual do processador, enquanto o SPSR é usado para salvar o estado do processador durante a ocorrência de alguma exceção ou interrupção.
+f)	Qual a finalidade do LR (Link Register)?
+O LR (Link Register) armazena o endereço de retorno após uma chamada de função para que o programa possar retornar para onde estava após a execução da função.
+g)	Qual o propósito do Program Status Register (PSR) nos processadores ARM?
+O Program Status Register (PSR), também conhecido como CPSR (Current Program Status Register) é utilizado para armazenar informações cruciais sobre o estado atual do processador. Ele contém informação como o estado das flags de condição, que são indicadores do resultado de ooperações aritméticas ou lógicas, como flag de zero, flag de negativo, flag de carry, entre outras. Além disso, o PSR armazena informação sobre o modo de operação atual do processador, incluindo modo privilegiado ou não e até modo de operação Thumb. Responsável por controle de interrupções e transições de modo, salvando informações necessárias durante as operações.
+h)	O que é a tabela de vetores de interrupção?
+É uma tabela localizada na memória que contém os endereços das rotinas de tratamento de interrupção para cada tipo de interrupção.
+i)	Qual a finalidade do NVIC (Nested Vectored Interrupt Controller) nos microcontroladores ARM e como ele pode ser utilizado em aplicações de tempo real?
+O NVIC (Nested Vectored Interrupt Controller) é um componente periférico responsável por gerenciar interrupções. Permite que o processador possa responder rapidamento a eventos externos ou solicitações periféricas. O NVIC utiliza do método Group Priority e Sub Priority para configurar as prioridades de cada interrupção. Ele pode lidar com interrupção aninhada, que siginifca que se uma interrupção ocorrer durante o tratamento de outra, o NVIC pode suspender temporariamente a interrupção atual e lidar com a nova.
+j)	Em modo de execução normal, o Cortex-M pode fazer uma chamada de função usando a instrução BL que o muda o PC para o endereço de destino e salva o ponto de execução atual no registrador LR. Ao final da função, é possível recuperar esse contexto usando uma instrução BX LR, por exemplo, que atualiza o PC para o ponto anterior. No entanto, quando acontece uma interrupção, o LR é preenchido com um valor completamente diferente, chamado de EXC_RETURN. Explique o funcionamento desse mecanismo e especifique como o Cortex-M consegue fazer o retorno da interrupção.
+O Cortex-M utiliza o valor EXC_RETURN para determinar o ponto de retorno após o tratamento da interrupção. Após o processamento da interrupção, o processador consulta o valor EXC_RETURN no Link Register para saber para onde retornar. Isso permite uma retomada suave e correta da execução do programa no ponto de interrupção. 
+k)	Qual a diferença no salvamento de contexto, durante a chegada de uma interrupção entre os processadores Cortex-M3 e Cortex-M4F (com ponto flutuante)? Descreva em termos de tempo e também de uso da pilha. Explique também o que é lazy Stack e como ele é configurado.
+A presença de ponto flutuante permite que o processador execute operações matemáticas em números de pontos flutuantes de maneira mais rápida e eficiente do que se essas operações fossem realizadas apenas com as instruções de ponto fixo disponíveis no processador. Com uma FPU, o processador Cortex-M4 pode lidar diretamente com números de ponto flutuante, elimando a necessidade de emulação por software. Isso resulta em um desempenho aprimorado em aplicações que exigem esse tipo de cálculo. Em termos de tempo relacionado a memória, o Cortex- M4 que possui registrador de ponto flutuante precisa de mais tempo para salvar o contexto, pois mais registros precisam ser salvos na pilha. Deste modo o salvamento de contexto no Cortex M3 é mais rápido pois envolve menos registros e menos operações de salvamento na pilha.
+O conceito de lazy Stack é uma técnica utilizada para otimizar o uso da pilha durante o tratamento de interrupções. Em vez de salvar todo o contexto imediatamente ao ocorrer uma interrupção, alguns processadores ARM Cortex-M permitem adiar o salvamento de parte do contexto até que seja realmente necessário. Ex: Registros de ponto flutuantes podem não ser salvos imediatamente, mas apenas quando ela é executada durante o tratamento de interrupção. O lazy Stack é configurado por meio de opções de configuração específicas no compilador. 
