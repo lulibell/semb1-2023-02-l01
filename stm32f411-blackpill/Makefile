@@ -8,8 +8,8 @@ DEPDIR = .deps
 
 # Arquivos a serem compilados
 
-SRCS = startup.c \
-        main.c
+SRCS =  src/startup.c \
+        src/main.c
 
 #Flags do compilador e linker
 
